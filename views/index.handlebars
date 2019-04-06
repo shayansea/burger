@@ -1,38 +1,51 @@
-<h1>burgers!</h1>
+{{!-- Main Header --}}
+<div id="header" class="text-center">
+    <h1 id="title">Eat the Burger!</h1>
+    <img class="burger-image" src="assets/img/burger1.png" alt="burger gif">
+</div>
+<div class="container">
+    <div class="col-sm-12 text-center">
+        <h4 "text-center">What burger do you want to NOM?</h4>
+        <form class="button-size" action="/api/burgers" method="POST">
+            <input type="text" class="text-center" id="insertBurger" name="burger_name" placeholder="Insert Burger Name Here..."></input>
+            <span class="input-group-btn">
+                <button type="submit" class="insertBurgerBtn btn btn-primary">EAT IT!</button>
+            </span>
+        </form>
+    </div>
+    <div class="row">
 
-<h2>burgers that are not sleepy!</h2>
+        {{!-- Uneaten Burgers --}}
+        <div class="col-sm-6">
+            <h4 class="text-center columnHeading">Burgers to Eat:</h4>
+            {{#each burgers}} {{#unless this.devoured}}
+            <form action="/api/update/{{this.id}}?_method=PUT" method="POST">
+                <div class="input-group">
+                    <input type="hidden" name="devoured" value="true">
+                    <li class="form-control uneaten">{{this.burger_name}}</li>
+                    <span class="input-group-btn">
+                        <button class="eatBurger btn btn-info" data-id="{{id}}" data-eat="{{devoured}}" type="submit">Devour It!</button>
+                    </span>
+                </div>
+            </form>
+            {{/unless}} {{/each}}
+        </div>
 
-<ul>
-  {{#each burgers}}
-    {{#unless sleepy}}
-      {{> burgers/burger-block sleep=true}}
-    {{/unless}}
-  {{/each}}
-</ul>
+        {{!-- Eaten burgers --}}
+        <div class="col-sm-6">
+            <h4 class="text-center columnHeading">Eaten Burgers:</h4>
+            {{#each burgers}} {{#if this.devoured}}
+            <div>
+                <li class="form-control devoured">{{this.burger_name}}</li>
+            </div>
+            </form>
+            {{/if}} {{/each}}
+        </div>
+    </div>
+    <br>
+</div>
 
-<h2>burgers that are sleepy!</h2>
-
-<ul>
-  {{#each burgers}}
-    {{#if sleepy}}
-      {{> burgers/burger-block sleep=false}}
-    {{/if}}
-  {{/each}}
-</ul>
-
-<h2>Add a burger</h2>
-<form class="create-form">
-
-  <div class="form-group">
-    <label for="ca">burger Name:</label>
-    <input type="text" id="ca" name="name">
-  </div>
-
-  <div class="form-group">
-    <label for="slee">Sleepy?</label><br>
-    <input type="radio" name="sleepy" value="1" checked> Sleepy!<br>
-    <input type="radio" name="sleepy" value="0"> Awake
-  </div>
-
-  <button type="submit">Add burger</button>
-</form>
+<footer>
+    <a href="/api" target="_blank">API</a> |
+    <a href="" target="_blank">Github Repo</a>
+    </footer>
