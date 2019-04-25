@@ -19,12 +19,12 @@
         <div class="col-sm-6">
             <h4 class="text-center columnHeading">Burgers to Eat:</h4>
             {{#each burgers}} {{#unless this.devoured}}
-            <form action="/api/update/{{this.id}}?_method=PUT" method="POST">
+            <form action="/api/burgers/{{this.id}}?_method=PUT" method="PUT">
                 <div class="input-group">
                     <input type="hidden" name="devoured" value="true">
                     <li class="form-control uneaten">{{this.burger_name}}</li>
                     <span class="input-group-btn">
-                        <button class="eatBurger btn btn-info" data-id="{{id}}" data-eat="{{devoured}}" type="submit">Devour It!</button>
+                        <button class="eatBurger btn btn-info" data-id="{{id}}" data-eat="{{devoured}}">Devour It!</button>
                     </span>
                 </div>
             </form>
@@ -48,4 +48,19 @@
 <footer>
     <a href="/api" target="_blank">API</a> |
     <a href="" target="_blank">Github Repo</a>
-    </footer>
+</footer>
+
+
+<script>
+    $(".eatBurger").on("click", function() {
+        var id = $(this).attr("data-id");
+        console.log(id)
+        $.ajax({
+            method: "PUT",
+            url: "/api/burgers/" + id
+        })
+        .then(function(res) {
+            location.reload();
+        })
+    })
+</script>
