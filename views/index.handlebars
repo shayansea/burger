@@ -6,12 +6,13 @@
 <div class="container">
     <div class="col-sm-12 text-center">
         <h4 "text-center">What burger do you want to NOM?</h4>
-        <form class="button-size" action="/api/burgers" method="POST">
-            <input type="text" class="text-center" id="insertBurger" name="burger_name" placeholder="Insert Burger Name Here..."></input>
+        <div class="button-size">
+            <input type="text" class="text-center" id="insertBurger" name="burger_name"
+                placeholder="Type Burger Name Here..."></input>
             <span class="input-group-btn">
-                <button type="submit" class="insertBurgerBtn btn btn-primary">EAT IT!</button>
+                <button class="insertBurgerBtn btn btn-primary">Make a Burger!</button>
             </span>
-        </form>
+        </div>
     </div>
     <div class="row">
 
@@ -19,12 +20,13 @@
         <div class="col-sm-6">
             <h4 class="text-center columnHeading">Burgers to Eat:</h4>
             {{#each burgers}} {{#unless this.devoured}}
-            <form action="/api/burgers/{{this.id}}?_method=PUT" method="PUT">
+            <form>
                 <div class="input-group">
                     <input type="hidden" name="devoured" value="true">
                     <li class="form-control uneaten">{{this.burger_name}}</li>
                     <span class="input-group-btn">
-                        <button class="eatBurger btn btn-info" data-id="{{id}}" data-eat="{{devoured}}">Devour It!</button>
+                        <button class="eatBurger btn btn-info" data-id="{{id}}" data-eat="{{devoured}}">Devour
+                            It!</button>
                     </span>
                 </div>
             </form>
@@ -52,15 +54,33 @@
 
 
 <script>
-    $(".eatBurger").on("click", function() {
+    $(".insertBurgerBtn").on("click", function () {
+        var burgerName = $("#insertBurger").val().trim();
+        console.log(burgerName);
+
+        var newBurger = {
+            burger_name: burgerName
+        }
+
+        $.ajax({
+            method: "POST",
+            url: "/api/burgers",
+            data: newBurger
+        })
+            .then(function (res) {
+                location.reload();
+            });
+    });
+
+    $(".eatBurger").on("click", function () {
         var id = $(this).attr("data-id");
         console.log(id)
         $.ajax({
             method: "PUT",
             url: "/api/burgers/" + id
         })
-        .then(function(res) {
-            location.reload();
-        })
+            .then(function (res) {
+                location.reload();
+            })
     })
 </script>
